@@ -1,0 +1,18 @@
+(defvar icon-size 15)
+
+(defwidget launcher []
+  (box :spacing 5 :space-evenly false
+       (button :onclick "alacritty -e nvim &"
+         (image :image-width icon-size :image-height icon-size :path "/usr/share/icons/Papirus-Dark/48x48/apps/org.daa.NeovimGtk.svg" )
+       )
+       (button :onclick "firefox-developer-edition &"
+         (image :image-width icon-size :image-height icon-size :path "/usr/share/icons/Papirus/48x48/apps/firefox-developer-edition.svg" )
+       )
+       (button :onclick "inkscape &"
+         (image :image-width icon-size :image-height icon-size :path "/usr/share/icons/Papirus/48x48/apps/inkscape.svg" )
+       )
+       (button :onclick "screenshot s"
+         (image :image-width icon-size :image-height icon-size :path "/usr/share/icons/Papirus/48x48/devices/camera.svg" )
+       )
+  )
+)

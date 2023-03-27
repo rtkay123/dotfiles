@@ -1,0 +1,15 @@
+# Inserts a blank line between shell prompts
+add_newline = false
+
+[hostname]
+ssh_only = false
+format =  "@(bold blue)[$hostname](bold red) "
+trim_at = ".companyname.com"
+disabled = false
+
+[username]
+style_user = "yellow bold"
+style_root = "black bold"
+format = "   [$user]($style)"
+disabled = false
+show_always = true

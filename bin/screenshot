@@ -1,0 +1,19 @@
+#!/bin/sh
+
+dateTime=$(date '+%Y%m%d%H%M%S')
+mkdir -p $HOME/'Pictures/Screenshots'
+case $1 in
+  s)
+    grim $HOME/'Pictures/Screenshots/'$dateTime'.png'
+    echo "done"
+    ;;
+  r) 
+    grim -g "$(slurp)" $HOME/'Pictures/Screenshots/'$dateTime'.png'
+    ;;
+  *)
+    exit
+    ;;
+esac
+if [ $? = 0 ]; then
+  notify-send -i $HOME/'Pictures/Screenshots/'$dateTime'.png' "Receipt acquired!" "Screenshot saved at "$dateTime'.png'
+fi  

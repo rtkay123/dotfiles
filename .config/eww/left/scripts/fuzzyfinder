@@ -1,0 +1,8 @@
+#!/bin/sh
+
+file="/tmp/eww-sk-results"
+if [ ! -z "$1" -a "$1" != " " ]
+then
+        > $file
+        du -a ~/Development ~/.local/bin ~/.config | awk '{print $2}' | sk --filter "'$1" | head -n $2 | jq -ncR '[inputs]' > $file
+fi

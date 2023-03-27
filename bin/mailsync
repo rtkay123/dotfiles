@@ -1,0 +1,21 @@
+#! /bin/sh
+mkdir -p "$HOME/.config/mutt/"
+touch "$HOME/.config/mutt/.mailsynclastrun"
+mkdir -p "$HOME/.local/share/mail/personal"
+mbsync -a -c "$HOME/.config/isync/mbsyncrc"
+new=$(find "$HOME/.local/share/mail/personal/Inbox/new/" -type f -newer "$HOME/.config/mutt/.mailsynclastrun" 2> /dev/null)
+newcount=$(echo "$new" | sed '/^\s*$/d' | wc -l)
+if [ $newcount -gt 0 ]
+then
+    current=1
+    for file in $new; do
+        from=$(awk '/^From: / && ++n ==1,/^\<.*\>:/' "$file" | perl -CS -MEncode -ne 'print decode("MIME-Header", $_)' | awk '{ $1=""; if (NF>=3)$NF=""; print $0 }' | sed 's/^[[:blank:]]*[\"'\''\<]*//;s/[\"'\''\>]*[[:blank:]]*$//')
+        subject=$(awk '/^Subject: / && ++n == 1,/^\<.*\>: / && ++i == 2' "$file" | head -n 1 | perl -CS -MEncode -ne 'print decode("MIME-Header", $_)' | sed 's/^Subject: //' | sed 's/^{[[:blank:]]*[\"'\''\<]*//;s/[\"'\''\>]*[[:blank:]]*$//' | tr -d '\n')
+        if [ $current -eq 1 ]
+        then
+            notify-send "You have $newcount unread mail" "$from: $subject" -i mail-unread-new
+        else
+            notify-send "Incoming mail" "$from: $subject" -i mail-unread-new &
+        fi
+    done
+fi

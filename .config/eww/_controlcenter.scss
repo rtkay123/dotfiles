@@ -1,0 +1,172 @@
+.controlcenter {
+  @include popup;
+}
+
+.cc-username {
+  font-weight: 700;
+  font-size: larger;
+}
+
+$metric-height: 38px;
+$metric-width: 425px;
+$metric-border-radius: 100px;
+$metric-background-colour: $black;
+$metric-margin: 0 22px;
+
+@mixin highlight-trough {
+  background-color: $metric-background-colour;
+  border-radius: $metric-border-radius;
+  min-height: $metric-height;
+  margin: $metric-margin;
+}
+
+@mixin cc-toggle-button {
+  background-color: $background;
+  padding: 16px;
+  border-radius: 500px;
+  color: $foreground;
+  font-size: 16px;
+}
+
+.volume scale trough highlight {
+  all: unset;
+  background-color: $foreground;
+  border-radius: $metric-border-radius;
+}
+
+.brightness scale trough highlight {
+  all: unset;
+  background-color: $foreground;
+  border-radius: $metric-border-radius;
+}
+
+.brightness scale trough {
+  @include highlight-trough;
+  min-width: $metric-width;
+}
+
+.volume scale trough {
+  @include highlight-trough;
+  min-width: 365px;
+}
+
+.cc-uptime {
+  color: $foreground;
+}
+
+.cc-mic-button {
+  border-radius: 500px;
+  font-size: x-large;
+  background-color: $black;
+  padding: 10px;
+}
+
+.cc-toggle-row {
+  padding: 0px 20px;
+}
+
+.cc-metric-icon {
+  font-size: x-large;
+  padding-left: 35px;
+  color: black;
+  font-weight: bolder;
+}
+
+.cc-wifi-icon {
+  @include cc-toggle-button;
+}
+
+.cc-flight-icon {
+  @include cc-toggle-button;
+}
+
+.cc-bluetooth-icon {
+  @include cc-toggle-button;
+}
+
+.cc-activated-btn {
+  background-color: $green;
+  color: $background;
+}
+
+.cc-toggle-btn {
+  padding: 10px;
+  background-color: $black;
+  border-radius: 10px;
+}
+
+.cc-toggles {
+  padding-bottom: 20px;
+}
+
+.player-box {
+  all: unset;
+  padding: 40px;
+  background-color: $black;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+}
+
+.cc-song-title {
+  font-size: larger;
+}
+
+.cc-song-artist {
+  font-size: large;
+}
+
+.cc-music {
+  padding: 20px;
+}
+
+.cc-media-icon {
+  font-size: x-large;
+}
+
+.cc-song-progress scale trough highlight {
+  background-color: $green;
+  border-radius: $metric-border-radius;
+}
+
+.cc-song-progress scale trough {
+  @include highlight-trough;
+  min-width: 290px;
+  background-color: $background;
+  border-radius: $metric-border-radius;
+  min-height: 5px;
+  margin: $metric-margin;
+}
+
+.cc-avatar {
+  padding: 10px;
+}
+
+.picture-container {
+  border: 2px solid $black;
+  background-size: contain;
+  border-radius: 200px;
+}
+
+.cc-power-btn {
+  padding: 20px 0;
+}
+
+.cc-power-icon {
+  padding: 0px 20px;
+  background: $black;
+  font-size: 18px;
+  border-radius: 500px;
+}
+
+.restart {
+  color: $yellow;
+}
+
+.power-off {
+  color: $red;
+}
+
+.lock {
+  color: $blue;
+}

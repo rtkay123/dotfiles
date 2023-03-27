@@ -1,0 +1,93 @@
+#!/bin/sh
+
+config_dir="~/.config"
+# Reset
+NC='\033[0m'       # Text Reset
+
+# Regular Colors
+Black='\033[0;30m'        # Black
+Red='\033[0;31m'          # Red
+Green='\033[0;32m'        # Green
+Yellow='\033[0;33m'       # Yellow
+Blue='\033[0;34m'         # Blue
+Purple='\033[0;35m'       # Purple
+Cyan='\033[0;36m'         # Cyan
+White='\033[0;37m'        # White
+
+print_success() {
+    printf "\v\t\t%s${Cyan}%s${NC}%s${Green}%s${NC}\n" '' "${1}" ' has been setup. ' '✔'
+}
+
+setup_config() {
+    mkdir -p $config_dir
+    printf "\v\t\t%s${Green}%s${NC}\n" 'Setting up' " ${2}"
+    cp "./.config/$1" $config_dir -r
+    print_success $2
+}
+
+horizontal_rule() {
+    printf "\v"
+    printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+    printf "\v"
+}
+
+printf '\v%s\n\v' "Please enter space separated numbers to setup a configuration:"
+printf "\t%s${Red}%s${NC}%s\n" '(Submit' ' 0' ' to select everything)'
+
+horizontal_rule
+
+printf "\t%s${Blue}%s${NC}%s\n" ' 1)' ' Hyprland' ' - (wayland compositor)'
+printf "\t%s${Blue}%s${NC}%s\n" ' 2)' ' alacritty' ' - (terminal emulator)'
+printf "\t%s${Blue}%s${NC}%s%s\n" ' 3)' ' neovim' ' [opt: python-pynvim, xclip/wl-clipboard]' ' - (editor)'
+printf "\t%s${Blue}%s${NC}%s\n" ' 4)' ' eww' ' - (status bar and widgets)'
+printf "\t%s${Blue}%s${NC}%s%s\n" ' 5)' ' newsboat' ' - (rss aggregator)'
+printf "\t%s${Blue}%s${NC}%s%s\n" ' 6)' ' zathura' ' - (pdf reader)'
+printf "\t%s${Blue}%s${NC}%s%s\n" ' 7)' ' tmux' ' - (terminal multiplexer)'
+printf "\t%s${Blue}%s${NC}%s%s\n" ' 8)' ' starship' ' - (shell prompt)'
+printf "\t%s${Blue}%s${NC}%s%s\n" ' 9)' ' xplr' ' - (terminal file manager)'
+
+horizontal_rule
+
+
+printf "\t%s${Red}%s${NC}%s\n\v" 'Please enter your ' 'space seperated' ' selections:'
+
+read selections
+
+for selection in ${selections}; do
+    case "$selection" in
+       "1") setup_config hypr Hyprland
+       ;;
+       "2") setup_config alacritty Alacritty
+       ;;
+       "3") setup_config nvim Neovim
+       ;;
+       "4") setup_config eww eww
+       ;;
+       "5") setup_config newsboat newsboat
+       ;;
+       "6") setup_config zathura Zathura
+       ;;
+       "7") setup_config tmux tmux
+       ;;
+       "8") setup_config starship.toml "Starship Prompt"
+       ;;
+       "9") setup_config xplr xplr
+       ;;
+       "0") 
+           setup_config hypr Hyprland
+           setup_config alacritty Alacritty
+           setup_config nvim Neovim
+           setup_config eww eww
+           setup_config zathura Zathura
+           setup_config starship.toml "Starship Prompt"
+           setup_config newsboat Newsboat
+           setup_config tmux tmux
+           setup_config xplr xplr
+           break
+       ;;
+    esac
+done
+
+horizontal_rule
+
+exit 0

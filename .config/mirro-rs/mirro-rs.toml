@@ -1,0 +1,12 @@
+[general]
+outfile = "/etc/pacman.d/mirrorlist" # must not end with trailing slash
+export = 50
+sort = "score" # percentage, duration, delay, score
+cache-ttl = 24
+rate-speed = true
+timeout = 5
+
+[filters]
+countries = [ 'South Africa', 'Kenya', 'France', 'United Kingdom' ]
+protocols = [ "https", "http" ]
+completion-percent = 100

@@ -1,0 +1,63 @@
+(defvar icon-path-charging '/right/icons/charging/battery-')
+(defvar icon-path-discharging '/right/icons/discharging/battery-')
+
+(defwidget battery [bat]
+       (image
+         :path {
+			bat.status == 'Discharging'
+				? bat.capacity <= 20 ? EWW_CONFIG_DIR + icon-path-discharging + '000.svg' 
+				: bat.capacity <= 40 ? EWW_CONFIG_DIR + icon-path-discharging + '020.svg' 
+				: bat.capacity <= 60 ? EWW_CONFIG_DIR + icon-path-discharging + '040.svg' 
+				: bat.capacity <= 80 ? EWW_CONFIG_DIR + icon-path-discharging + '080.svg' 
+				: bat.capacity <= 95 ? EWW_CONFIG_DIR + icon-path-discharging + '080.svg' 
+				: EWW_CONFIG_DIR + icon-path-discharging + '100.svg' 
+			: bat.status == 'Charging' || bat.status == "Not charging"
+				? bat.capacity <= 20 ? EWW_CONFIG_DIR + icon-path-charging + '000-charging.svg' 
+				: bat.capacity <= 40 ? EWW_CONFIG_DIR + icon-path-charging + '020-charging.svg' 
+				: bat.capacity <= 60 ? EWW_CONFIG_DIR + icon-path-charging + '040-charging.svg' 
+				: bat.capacity <= 95 ? EWW_CONFIG_DIR + icon-path-charging + '080-charging.svg' 
+				: EWW_CONFIG_DIR + icon-path-charging + '100-charging.svg' 
+			: EWW_CONFIG_DIR + icon-path-charging + '100-charging.svg' 
+	     	})
+)
+
+(defwidget getram []
+ (box 
+   (label :text "RAM" :class "txt-ram")
+   (box :class "circular-icon"
+     (circular-progress
+       :class {
+       EWW_RAM.used_mem_perc > 80 ? "red"
+       : EWW_RAM.used_mem_perc > 60 ? "orange"
+       : EWW_RAM.used_mem_perc > 40 ? "yellow"
+       : EWW_RAM.used_mem_perc > 20 ? "blue"
+       : "green"
+       }
+       :value {EWW_RAM.used_mem_perc}
+       :start-at 75
+       :thickness 2
+     )
+   )
+  )
+)
+
+(defwidget metric [label value onchange cls]
+  (box :orientation "h"
+       :class cls
+       :space-evenly false
+       :hexpand { cls == 'volume' }
+    (box :class "label" label)
+    (scale :min 0
+           :max 101
+           :active {onchange != ""}
+           :value value
+           :onchange onchange))
+)
+
+(defwidget wireless-info []
+  (box :orientation 'h' :spacing 8
+       (label :text { bluetooth-enabled == "enabled" ? "" : ''} :visible {flight_mode != 'enabled'} )
+       (label :text { wifi-enabled == "enabled" || ethernet-status == "connected" ? (ethernet-status == "connected" ? '󰈀' : '') : '󰲜'  } :visible {flight_mode != 'enabled'} )
+       (label :text "" :visible {flight_mode == 'enabled'} )
+  )
+)

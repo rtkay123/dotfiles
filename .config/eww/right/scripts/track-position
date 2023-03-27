@@ -1,0 +1,4 @@
+#!/bin/sh
+length=$(playerctl metadata | grep length | awk '{ print $3 }')
+pos=$(playerctl position | sed -e 's/\.//g')
+awk -v var1=$pos -v var2=$length 'BEGIN { print  ( var1 / var2 * 100 ) }'

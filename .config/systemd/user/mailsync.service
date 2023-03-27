@@ -1,0 +1,10 @@
+[Unit]
+Description=Mailbox synchronization service
+
+[Service]
+Type=oneshot
+ExecStart=/home/rtkay/.local/bin/mailsync
+ExecStartPost=/home/rtkay/.config/notmuch/notmuch-hook.sh
+
+[Install]
+WantedBy=default.target

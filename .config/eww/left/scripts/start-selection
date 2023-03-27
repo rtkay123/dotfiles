@@ -1,0 +1,6 @@
+#!/bin/bash
+parentdir="$(dirname "$1")"
+tmux new-session -d -s mySession -n myWindow
+tmux send-keys -t mySession:myWindow "cd $parentdir" Enter
+tmux send-keys -t mySession:myWindow "nvim $1" Enter
+tmux attach -t mySession:myWindow

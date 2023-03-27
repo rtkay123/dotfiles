@@ -1,0 +1,6 @@
+#!/bin/sh
+while true
+do
+    light
+    sleep 0.2s
+done

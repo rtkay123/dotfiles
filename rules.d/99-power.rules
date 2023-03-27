@@ -1,0 +1,4 @@
+# Rule for when switching to battery
+SUBSYSTEM=="power_supply",ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="/usr/local/bin/powerctl.sh off"
+# Rule for when switching to AC
+SUBSYSTEM=="power_supply",ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="/usr/local/bin/powerctl.sh on"

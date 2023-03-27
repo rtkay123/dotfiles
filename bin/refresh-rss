@@ -1,0 +1,7 @@
+#! /bin/sh
+newsboat -x reload
+unread="$(newsboat -x print-unread | sed 's/[^0-9]*//g')"
+if [ "$unread" -gt 0 ]
+then
+    notify-send -i news-subscribe "newsboat" "You have $unread unread articles"
+fi

@@ -1,0 +1,11 @@
+(include "./left/fzf.yuck")
+(include "./left/launcher.yuck")
+(include "./left/workspaces.yuck")
+
+(defwidget left []
+  (box :orientation "h" :space-evenly false :spacing 10
+       (runner)
+       (launcher)
+       (workspaces)
+  )
+)

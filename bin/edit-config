@@ -1,0 +1,107 @@
+#! /bin/sh
+
+set -- alacritty waybar eww hyprland gammastep neovim newsboat mako mpv mirro-rs psd cargo ssh tmux xplr zathura starship zellij quit
+
+choice=$(echo "$(printf '%s\n' "$@")" | rofi -dmenu -theme dmenu -p 'Edit config file: ')
+
+case "$choice" in
+	quit)
+		echo "Program terminated." && exit 1
+	;;
+	alacritty)
+		choice="$HOME/.config/alacritty/alacritty.yml"
+	;;
+	waybar)
+        set -- config stylesheet
+        options=$(echo "$(printf '%s\n' "$@")" | rofi -dmenu -theme dmenu -p '[waybar config] ->: ')
+        case "$options" in
+            config)
+		        choice="$HOME/.config/waybar/config"
+            ;;
+            stylesheet)
+		        choice="$HOME/.config/waybar/style.css"
+            ;;
+            *)
+                exit 1
+            ;;
+        esac
+	;;
+	eww)
+        set -- config stylesheet
+        options=$(echo "$(printf '%s\n' "$@")" | rofi -dmenu -theme dmenu -p '[eww config] ->: ')
+        case "$options" in
+            config)
+		        choice="$HOME/.config/eww/eww.yuck"
+            ;;
+            stylesheet)
+		        choice="$HOME/.config/eww/eww.scss"
+            ;;
+            *)
+                exit 1
+            ;;
+        esac
+	;;
+	hyprland)
+		choice="$HOME/.config/hypr/hyprland.conf"
+	;;
+	gammastep)
+		choice="$HOME/.config/gammastep/gammastep.conf"
+	;;
+	mako)
+		choice="$HOME/.config/mako/config"
+	;;
+	mirro-rs)
+		choice="$HOME/.config/mirro-rs/mirro-rs.toml"
+	;;
+	neovim)
+		choice="$HOME/.config/nvim/init.lua"
+	;;
+	newsboat)
+        set -- config urls
+        options=$(echo "$(printf '%s\n' "$@")" | rofi -dmenu -theme dmenu -p '[newsboat config] ->: ')
+        case "$options" in
+            config)
+		        choice="$HOME/.config/newsboat/config"
+            ;;
+            urls)
+		        choice="$HOME/.config/newsboat/urls"
+            ;;
+            *)
+                exit 1
+            ;;
+        esac
+	;;
+	mpv)
+		choice="$HOME/.config/mpv/mpv.conf"
+	;;
+	psd)
+		choice="$HOME/.config/psd/psd.conf"
+	;;
+	tmux)
+		choice="$HOME/.config/tmux/tmux.conf"
+	;;
+	xplr)
+		choice="$HOME/.config/xplr/init.lua"
+	;;
+	zathura)
+		choice="$HOME/.config/zathura/zathurarc"
+	;;
+	starship)
+		choice="$HOME/.config/starship.toml"
+	;;
+	ssh)
+		choice="$HOME/.ssh/config"
+	;;
+	zellij)
+		choice="$HOME/.config/zellij/config.kdl"
+	;;
+	cargo)
+		choice="$HOME/.cargo/config"
+	;;
+	*)
+		exit 1
+	;;
+esac
+
+parent=$(dirname $choice)
+alacritty --working-directory $parent -e nvim $choice

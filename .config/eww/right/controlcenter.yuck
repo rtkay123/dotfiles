@@ -1,0 +1,155 @@
+(defwidget closer [window]
+  (eventbox :onclick "eww close ${window} && eww close ${window}-closer"))
+ 
+(defwindow controlcenter-closer
+  :monitor 0
+  :geometry (geometry :width "100%" :height "100%")
+  :stacking "fg"
+  :focusable false
+  (closer :window "controlcenter"))
+
+(defwindow controlcenter
+           :monitor 0
+           :geometry (geometry 
+                               :x "20px"
+                               :y "10px"
+                               :width "20%"
+                               :height "50%"
+                               :anchor "top right")
+           :stacking "fg"
+           :class "controlcenter"
+           :wm-ignore false
+           (cc-content)
+)
+
+(defwidget cc-content []
+  (eventbox :onhoverlost "eww close controlcenter"
+  (box :orientation "v" :space-evenly false :halign "start" :spacing 8
+       (cc-user-row)
+       (status)
+       (volume-brightness)
+       (playerctl)
+  ))
+)
+
+(defwidget playerctl []
+  (box :class "cc-music"
+  (box 
+      :class "player-box" :orientation 'v'
+      :style "background-image: url('${song-image}')"
+      :spacing 5
+      (centerbox :orientation "v"
+          (label :class "cc-song-title" :text song :wrap true)
+          (label :class "cc-song-artist" :text artist)
+          (label :class "cc-song-artist" :text album)
+           
+      )
+      (metric :label ""
+           :cls "cc-song-progress"
+           :value track-position
+           :onchange "playerctl position")
+      (centerbox
+        (button :class "cc-media-icon"
+          :onclick "playerctl previous" 
+                "󰒮" )
+        (button 
+          :onclick "playerctl play-pause" 
+          :class "cc-media-icon"
+          { play-status == "Paused" ? "" : "" }
+        )
+        (button :class "cc-media-icon" 
+          :onclick "playerctl next" 
+                "󰒭" )
+      )
+  )
+  )
+)
+
+(defwidget volume-brightness []
+   (box :orientation "v" :space-evenly false :spacing 15 :hexpand true
+     (overlay :halign "center"  
+       (metric :label "" :hexpand true
+            :cls "brightness"
+            :value backlight
+            :onchange "light -S {}")
+       (label :text "" :halign "start" :class "cc-metric-icon")
+     )
+          (box :space-evenly false :halign "start"
+              (overlay :halign "end"
+                 (metric :label ""
+                      :cls "volume"
+                      :value volume
+                      :onchange "pactl -- set-sink-volume 0 {}%"
+                 )
+                 (label :text "󰓃" :halign "start" :class "cc-metric-icon")
+              )
+              (button :class { "cc-mic-button ${mic-muted == 'yes' ? 'cc-activated-btn' : ''}" } :onclick "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+                 (label :class {mic-muted == 'yes' ? 'cc-activated-btn' : ''} :text {mic-muted == 'yes' ? "󰍭" : ""})
+              )
+         )
+)
+)
+
+(defwidget status []
+  (box :orientation "v" :space-evenly false :class "cc-toggles" :spacing 5
+    (box :orientation 'h' :class "cc-toggle-row" :spacing 5
+      (box :orientation 'h' :space-evenly false :class "cc-toggle-btn wifi" :spacing 10
+        (button :onclick { "rfkill ${wifi-enabled == 'enabled' ? '' : 'un'}block wlan" }
+          (label :class { "cc-wifi-icon ${wifi-enabled == 'enabled' ? 'cc-activated-btn' : ''}"} :text "" )
+        )
+        (box :orientation 'v' :valign "center" :halign "start"
+         (label :text { "${ssid == '' ? 'Disconnected': ssid}" } :halign "start" :limit-width 15)
+         (label :text { "${ssid == '' ? 'signal level' : wifi-strength}" } :class "cc-uptime" :halign "start" :limit-width 10)
+        )
+      )
+      (box :orientation 'h' :space-evenly false :class "cc-toggle-btn bluetooth" :spacing 10
+        (button :onclick { "rfkill ${bluetooth-enabled == 'enabled' ? '' : 'un'}block bluetooth" }
+          (label :class { "cc-bluetooth-icon ${bluetooth-enabled == 'enabled' ? 'cc-activated-btn' : ''}"} :text "" )
+        )
+        (box :orientation 'v' :valign "center" :halign "start"
+         (label :text { bt-count > 0 ? "Connected" : bluetooth-enabled == 'enabled' ? 'Disconnected' : 'Disabled' } :halign "start" :limit-width 15)
+         (label :text bluetooth-name :class "cc-uptime" :halign "start" :limit-width 10)
+        )
+      )
+    )
+    (box :orientation 'h' :class "cc-toggle-row" :spacing 5
+      (box :orientation 'h' :space-evenly false :class "cc-toggle-btn flight" :spacing 10
+        (button :onclick { "rfkill ${flight_mode == 'enabled' ? 'un' : ''}block all" }
+          (label :class {"cc-flight-icon ${flight_mode == 'enabled' ? 'cc-activated-btn' : ''}"} :text "" )
+        )
+        (box :orientation 'v' :valign "center" :halign "start"
+         (label :text "Airplane Mode" :halign "start" :limit-width 15)
+         (label :text { flight_mode == "disabled" ? "Off" : "On" } :class "cc-uptime" :halign "start" :limit-width 10)
+        )
+      )
+      (box :orientation 'h' :space-evenly false :class "cc-toggle-btn bluetooth" :spacing 10
+        (button
+          (label :class "cc-bluetooth-icon" :text "" )
+        )
+        (box :orientation 'v' :valign "center" :halign "start"
+         (label :text "Profile" :halign "start" :limit-width 15)
+         (label :text "Battery" :class "cc-uptime" :halign "start" :limit-width 10)
+        )
+      )
+    )
+  )
+)
+
+
+(defwidget cc-user-row [] 
+  (box :orientation "h" :space-evenly false :class "cc-avatar" :spacing 10
+       (box :class "picture-container"
+            :style "background-image: url('${EWW_CONFIG_DIR}/right/icons/avatar.jpg')"
+            :height 100 :width 100
+       )
+       (box :orientation 'v' :valign "center"
+         (label :text username  :class "cc-username" :halign "start")
+         (label :text uptime :class "cc-uptime")
+       )
+       (box :orientation 'h' :halign "end" :hexpand true :space-evenly false :spacing 10
+         (button :class 'cc-power-btn' :onclick 'systemctl reboot' (label :class 'cc-power-icon restart' :text ""))
+         (button :class 'cc-power-btn' :onclick '' (label :class 'cc-power-icon lock' :text ""))
+         (button :class 'cc-power-btn' :onclick 'systemctl poweroff' (label :class 'cc-power-icon power-off' :text "⏻"))
+       )
+  )
+)

@@ -1,0 +1,67 @@
+#!/bin/sh
+
+# You can call this script like this:
+# $ ./volumeControl.sh up
+# $ ./volumeControl.sh down
+# $ ./volumeControl.sh mute
+
+# Script modified from these wonderful people:
+# https://github.com/dastorm/volume-notification-dunst/blob/master/volume.sh
+# https://gist.github.com/sebastiencs/5d7227f388d93374cebdf72e783fbd6a
+
+get_volume() {
+  pactl list sinks | tr ' ' '\n' | grep -m1 '%' | tr -d '%'
+}
+
+is_mute() {
+  value=$(pactl list sinks | grep Mute | xargs)
+  value=${value#*:}
+  VAR1="no"
+
+  if [ "$value" = "$VAR1" ]; then
+      true
+  else
+      false
+  fi
+}
+
+send_notification() {
+  iconMuted="audio-volume-muted"
+  echo $(is_mute)
+  if is_mute ; then
+    dunstify -i $iconMuted -r 2593 -u normal "mute"
+  else
+    volume=$(get_volume)
+    iconSound=""
+    if [ $volume -gt 66 ]
+    then
+      iconSound="audio-volume-high"
+    elif [ $volume -gt 33 ]
+    then
+      iconSound="audio-volume-medium"
+    else
+      iconSound="audio-volume-low"
+    fi
+    notify-send  "audio -> [$volume]"  -h int:value:"$volume" -i $iconSound -h string:x-dunst-stack-tag:volume
+  fi
+}
+
+case $1 in
+  up)
+    # set the volume on (if it was muted)
+    pactl set-sink-mute @DEFAULT_SINK@ false
+    # up the volume (+ 2%)
+    current=$(pactl list sinks | tr ' ' '\n' | grep -m1 '%' | tr -d '%')
+    [ $current -lt 99 ] && pactl set-sink-volume @DEFAULT_SINK@ +2%
+    send_notification
+    ;;
+  down)
+    pactl set-sink-volume @DEFAULT_SINK@ -1000
+    send_notification
+    ;;
+  mute)
+    # toggle mute
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+    send_notification
+    ;;
+esac

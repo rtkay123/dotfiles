@@ -1,0 +1,134 @@
+#!/bin/sh
+
+device="wlan0"
+get_connection_status() {
+    iwctl station ${device} show | rg State | awk '{ print $2 }'
+}
+
+get_ssid() {
+    iwctl station wlan0 show | rg "Connected network" | awk '{ $1=$2=""; print $0 }' | sed 's/^ *//g'
+}
+
+device_enabled(){
+    result=$(rfkill | rg $1 | awk '{ $1=$2=$3=""; print $0 }' | sed 's/^ *//g')
+    if [ "$result" = "unblocked unblocked" ]
+    then
+        echo "enabled"
+    else
+        echo "disabled"
+    fi
+}
+
+flight_mode_on(){
+    bt=$(rfkill | rg "bluetooth" | rg -w "blocked" | wc -l)
+    wifi=$(rfkill | rg "wlan" | rg -w "blocked" | wc -l)
+    if [ "$bt" -gt 0 ]
+    then
+        if [ $wifi -gt 0 ]
+        then
+            echo "enabled"
+        else
+            echo "disabled"
+        fi
+    else
+        echo "disabled"
+    fi
+}
+
+ethernet_plugged() {
+    operstate=$(cat /sys/class/net/$1/operstate)
+    carrier=$(cat /sys/class/net/$1/carrier)
+    if [ "$carrier" -eq 1 ]
+    then
+        if [ "$operstate" = "up" ]
+        then
+            echo "connected"
+        else
+            echo "disconnected"
+        fi
+    else
+        echo "disconnected"
+    fi
+
+}
+
+connected_bluetooth_device() {
+    bluetoothctl devices Connected | awk '{ $1=$2=""; print $0 }' | sed 's/^ *//g'
+}
+
+bt_connection_count() {
+    connected_bluetooth_device | wc -l
+}
+
+wifi_strength() {
+    rssi=$(iwctl station wlan0 show | rg -w RSSI | awk '{ print $2 }')
+    if [ "$rssi" -le '-90' ]
+    then
+        echo "Unusable"
+    elif [ "$rssi" -le '-80' ] 
+    then
+        echo "Not Good"
+    elif [ "$rssi" -le '-70' ] 
+    then
+        echo "Okay"
+    elif [ "$rssi" -le '-67' ] 
+    then
+        echo "Very Good"
+    elif [ "$rssi" -lt '-30' ] 
+    then
+        echo "Amazing"
+    fi
+}
+
+## Get SSID
+
+if [ $1 = "ssid" ]
+then
+    is_connected=$(get_connection_status)
+    if [ $is_connected = "connected" ]
+    then
+        get_ssid
+    fi
+fi
+
+## IS WIFI CONNECTED
+
+if [ $1 = "status" ]
+then
+    get_connection_status
+fi
+
+if [ $1 = "bluetooth-enabled" ]
+then
+    device_enabled bluetooth
+fi
+
+if [ $1 = "wifi-enabled" ]
+then
+    device_enabled wlan
+fi
+
+if [ $1 = "bluetooth-name" ]
+then
+    connected_bluetooth_device
+fi
+
+if [ $1 = "flight" ]
+then
+    flight_mode_on
+fi
+
+if [ $1 = "bt-count" ]
+then
+    bt_connection_count
+fi
+
+if [ $1 = "ethernet" ]
+then
+    ethernet_plugged $2
+fi
+
+if [ $1 = "strength" ]
+then
+    wifi_strength
+fi

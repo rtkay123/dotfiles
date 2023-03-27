@@ -1,0 +1,40 @@
+.fzf {
+  background: rgba($background, 0.8);
+  border-radius: 10px;
+}
+
+.fzf-container {
+  @include popup;
+}
+
+.fzf-inner-content {
+  padding: 10px;
+}
+
+.fzf-search {
+  @include popup;
+  padding: 10px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.fzf-input {
+  padding: 0 10px;
+}
+
+.fzf-search-result-container {
+  padding: 5px;
+}
+
+.fzf-search-result {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+.fzf-search-result:hover {
+  color: green;
+}
+
+.fzf-prompt {
+  color: $green;
+}

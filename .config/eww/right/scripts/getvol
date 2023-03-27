@@ -1,0 +1,7 @@
+#!/bin/sh
+while true
+do
+    pactl list sinks | grep '^[[:space:]]Volume:' | head -n 1 | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
+    sleep 0.2s
+done
+

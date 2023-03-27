@@ -1,0 +1,47 @@
+* {
+  all: unset;
+  color: #b3cfa7;
+  font-family: Inter;
+  font-family: Symbols Nerd Font Mono;
+}
+
+@mixin popup {
+  background-color: rgba($background, 0.8);
+  border-radius: 15px;
+  border: 2px solid #474f54;
+}
+
+@import "src/colours";
+@import "src/controlcenter";
+@import "src/fuzzyfinder";
+
+.container {
+  padding: 4px 8px;
+  background-color: rgba(42, 47, 51, 0.8);
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+$circular-progress-padding: 5px;
+
+.txt-ram,
+.clock {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.circular-icon {
+  margin-top: 2px;
+}
+
+.workspace-entry {
+  padding: 0 5px;
+}
+
+.workspace-occupied {
+  color: $green;
+}
+
+.workspace-current {
+  color: $blue;
+}

@@ -1,0 +1,45 @@
+auto-reload yes
+reload-threads 100
+
+highlight feedlist "———».*«———" color2 default bold
+highlight feedlist ".*0/0.." default default invis
+
+# unbind keys
+unbind-key ENTER
+unbind-key j
+unbind-key k
+unbind-key J
+unbind-key K
+
+# bind keys - vim style
+bind-key j down
+bind-key k up
+bind-key l open
+bind-key h quit
+
+# highlights
+highlight article "^(Title):.*$" blue default
+highlight article "https?://[^ ]+" red default
+highlight article "\\[image\\ [0-9]+\\]" green default
+
+color background          default   default
+color listnormal          color8    default
+color listfocus           color7    color0
+color listnormal_unread   color15    default bold
+color listfocus_unread    color2 color0   bold
+color info                color7  color0   bold
+color article             color7   default bold
+
+highlight article "^Feed:.*" color2 default 
+highlight article "^Title:.*" color4 default bold
+highlight article "^Author:.*" color2 default
+highlight article "^Date:.*" color7 default
+highlight article "^Link:.*" color12 default
+highlight article "^Flags:.*" color9 default
+
+# Disabled because i'm using a systemd timer to handle notifications
+#
+#notify-program "/usr/bin/notify-send"
+#notify-format  "%d new articles (%n unread articles, %f unread feeds)"
+
+# vi: ft=muttrc

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# You can call this script like this:
+# $ ./brightnessControl.sh up
+# $ ./brightnessControl.sh down
+
+# Script inspired by these wonderful people:
+# https://github.com/dastorm/volume-notification-dunst/blob/master/volume.sh
+# https://gist.github.com/sebastiencs/5d7227f388d93374cebdf72e783fbd6a
+
+get_brightness() {
+  light | cut -d '.' -f 1
+}
+
+send_notification() {
+  icon="notification-display-brightness"
+  brightness=$(get_brightness)
+  bar=$(seq -s "⸻" 0 $((brightness / 12)) | sed 's/[0-9]//g')
+  # Send the notification
+
+  notify-send  "brightness -> [$brightness]"  -h int:value:"$brightness" -i $icon -h string:x-dunst-stack-tag:brt
+
+}
+
+case $1 in
+  up)
+    # increase the backlight by 1%
+    light -A 1
+    send_notification
+    ;;
+  down)
+    # decrease the backlight by 1%
+    light -U 1
+    send_notification
+    ;;
+esac

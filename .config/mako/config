@@ -1,0 +1,32 @@
+sort=-time
+layer=overlay
+background-color=#31363b
+text-color=#b3cfa7
+progress-color=#5c6a72e6
+width=300
+height=110
+border-size=0
+border-color=#475258e6
+border-radius=5
+icons=1
+max-icon-size=64
+default-timeout=5000
+ignore-timeout=0
+font=monospace 10
+icon-path=/usr/share/icons/Colloid-dark
+
+[urgency=low]
+border-color=#cccccc
+
+[urgency=normal]
+#border-color=#a7c080e6
+
+[urgency=high]
+border-color=#bf616a
+default-timeout=0
+
+[category=mpd]
+default-timeout=2000
+group-by=category
+
+# vi: ft=dosini

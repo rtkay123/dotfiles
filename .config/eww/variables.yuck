@@ -1,0 +1,82 @@
+(deflisten volume
+  :initial "50"
+  "./right/scripts/getvol")
+
+(deflisten backlight
+  :initial "40"
+  "./right/scripts/getbacklight")
+
+(defpoll uptime :interval "60s"
+  `uptime -p`)
+
+(defpoll username :interval "3600s"
+  `whoami`)
+
+(defpoll wifi-enabled :interval "1s"
+  "./right/scripts/wireless-net wifi-enabled")
+
+(defpoll bluetooth-enabled :interval "1s"
+  "./right/scripts/wireless-net bluetooth-enabled")
+
+(defpoll clock :interval "1s"
+  `date "+%a, %H:%M"`)
+
+(deflisten song
+ `playerctl --follow metadata --format {{title}}`
+)
+
+(deflisten artist
+ `playerctl --follow metadata --format {{artist}}`
+)
+
+(defpoll track-position :interval "0.2s"
+  :initial 1
+ "./right/scripts/track-position"
+)
+
+(deflisten song-image
+ `playerctl --follow metadata --format {{artUrl}}`
+)
+
+(deflisten album
+ `playerctl --follow metadata --format {{album}}`
+)
+
+(deflisten play-status
+ `playerctl --follow status`
+)
+
+(defpoll ssid :interval "2s"
+  "./right/scripts/wireless-net ssid")
+
+(defpoll wifi-status :interval "1s"
+  "./right/scripts/wireless-net status")
+
+(defpoll wifi-strength :interval "5s"
+  "./right/scripts/wireless-net strength")
+
+(defpoll bluetooth-name :interval "5s"
+  "./right/scripts/wireless-net bluetooth-name")
+
+(defpoll flight_mode :interval "1s"
+  "./right/scripts/wireless-net flight")
+
+(defpoll bt-count :interval "1s" :initial 0
+  "./right/scripts/wireless-net bt-count")
+
+(deflisten workspaces :initial "[]" "bash ./left/scripts/get-workspaces")
+(deflisten current_workspace :initial "1" "bash ./left/scripts/get-active-workspace")
+
+(defpoll ethernet-status :interval "5s"
+  "./right/scripts/wireless-net ethernet enp0s31f6")
+
+(defpoll mic-muted :interval "0.2s"
+  `pactl get-source-mute @DEFAULT_SOURCE@ | awk '{ print $2}'`
+)
+
+(deflisten query :initial "[1,2,3]"
+  `tail -F /tmp/eww-sk-results 2>/dev/null`)
+
+(defpoll weather :initial "" :interval "3h"
+  `curl "wttr.in/?format=%c+%t+%C"`
+)

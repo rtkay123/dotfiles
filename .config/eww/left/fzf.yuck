@@ -1,0 +1,44 @@
+(defwidget runner []
+  (button :halign "start" :onclick "eww open --toggle fzf"
+       ""
+  )
+)
+
+(defwindow fzf
+           :monitor 0
+           :geometry (geometry 
+                               :x "20px"
+                               :y "10px"
+                               :width "20%"
+                               :height "50%"
+                               :anchor "top left")
+           :stacking "fg"
+           :class "fzf"
+           :wm-ignore false
+           :focusable true
+           (eventbox :onhoverlost "eww close fzf" :class 'fzf-container'
+             (box :orientation 'v' :space-evenly false :class 'fzf-inner-content'
+               (input-field)
+             )
+           )
+)
+
+(defwidget input-field []
+  (box :orientation 'v' :hexpand false :space-evenly false
+    (box :orientation 'h' :valign "start"  :space-evenly false :class 'fzf-search'
+      (button :halign "start"
+           ""
+      )
+      (input :class 'fzf-input' :hexpand true :onchange "./left/scripts/fuzzyfinder '{}' 20" :timeout "5s" )
+    )
+    (box :orientation 'v' :class 'fzf-search-result-container' :valign "start" :space-evenly false :spacing 5
+      (for query_result in query
+            (eventbox :class "fzf-search-result" :hexpand true :halign "start" :onclick "alacritty -e ./left/scripts/start-selection ${query_result} & eww close fzf"
+              (box :orientation 'h' :space-evenly false :spacing 5
+              (label :class 'fzf-prompt' :text "󰄾")
+              (label :limit-width 60 :truncate-left true :text query_result)
+            )
+        )
+      )
+    )
+))

@@ -1,0 +1,66 @@
+(defwidget workspaces2 []
+  (box :spacing 5 :space-evenly false
+       (button :onclick "firefox-developer-edition &"
+               ""
+       )
+       (button :onclick "inkscape &"
+               ""
+       )
+       (button :onclick "alacritty -e nvim &"
+               ""
+       )
+       (button :onclick "inkscape &"
+               ""
+       )
+       (button :onclick "inkscape &"
+               ""
+       )
+       (button :onclick "inkscape &"
+               ""
+       )
+       (button :onclick "inkscape &"
+               ""
+       )
+       (button :onclick "inkscape &"
+               ""
+       )
+       (button :onclick "inkscape &"
+               ""
+       )
+       (button :onclick "inkscape &"
+               ""
+       )
+  )
+)
+
+(defwidget workspaces-original []
+  (eventbox :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}" :class "workspaces-widget"
+    (box :space-evenly true
+      (label :text "${workspaces}${current_workspace}" :visible false)
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (box :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
+            (label :text "${workspace.id}")
+            )
+          )
+        )
+      )
+    )
+)
+
+(defwidget workspaces []
+  (eventbox :onscroll "bash ~/.config/eww/scripts/change-active-workspace {} ${current_workspace}" :class "workspaces-widget"
+    (box :space-evenly true
+      (label :text "${workspaces}${current_workspace}" :visible false)
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (box 
+            (label
+              :class "workspace-entry ${workspace.id == current_workspace ? "workspace-current" : ""} ${workspace.windows > 0 ? "workspace-occupied" : "workspace-empty"}"
+              :text {" ${workspace.id == current_workspace ? '' : workspace.windows > 0 ? '' : ''}"})
+            )
+          )
+        )
+      )
+    )
+)

@@ -1,0 +1,23 @@
+(include "./left/left.yuck")
+(include "./center/center.yuck")
+(include "./right/right.yuck")
+(include "./variables.yuck")
+
+(defwindow bar
+           :monitor 0
+           :geometry (geometry :x "0%"
+                               :y "2px"
+                               :width "99%"
+                               :anchor "top center")
+           :stacking "fg"
+           :exclusive true
+           :windowtype "dock"
+           :wm-ignore false
+  (centerbox
+    :class "container"
+    :orientation "h"
+    (left)
+    (center)
+    (right)
+  )
+)

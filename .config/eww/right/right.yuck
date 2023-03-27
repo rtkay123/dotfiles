@@ -1,0 +1,14 @@
+(include "./right/system.yuck")
+(include "./right/controlcenter.yuck")
+
+(defwidget right []
+  (box :orientation "h" :space-evenly false :spacing 10 :halign "end"
+       (getram)
+       (wireless-info)
+       (button :onclick "eww open --toggle controlcenter"
+         ""
+        )
+       (battery :bat {EWW_BATTERY.BAT0})
+       (label :text clock :class "clock")
+  )
+)

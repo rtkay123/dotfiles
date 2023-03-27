@@ -1,0 +1,10 @@
+[Unit]
+Description=Refresh RSS Feeds every two hours
+
+[Timer]
+OnCalendar=0/06:00:00
+OnBootSec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

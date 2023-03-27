@@ -1,0 +1,11 @@
+[Unit]
+Description=Refres RSS Feeds for Newsboat
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/rtkay/.local/bin/refresh-rss
+
+[Install]
+WantedBy=default.target
