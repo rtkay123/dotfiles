@@ -1,1 +1,1 @@
-require("kawaki")
+require('config')

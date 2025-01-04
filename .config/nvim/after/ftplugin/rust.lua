@@ -1,30 +1,28 @@
-local M = require('kawaki/lsp')
+local bufnr = vim.api.nvim_get_current_buf()
+-- vim.keymap.set(
+--   "n",
+--   "<leader>ca",
+--   function()
+--     vim.cmd.RustLsp('codeAction') -- supports rust-analyzer's grouping
+--   end,
+--   { silent = true, buffer = bufnr }
+-- )
 
-require('lspconfig').rust_analyzer.setup({
-    on_attach = M.on_attach,
-    capabilities = M.capabilities,
-    settings = {
-        ["rust-analyzer"] = {
-            assist = {
-                importPrefix = "by_self",
-            },
-            inlayHints = { locationLinks = false },
-            cargo = {
-                allFeatures = true
-            },
-            procMacro = {
-                enable = true
-            },
-            checkOnSave = {
-                command = "clippy"
-            },
-            diagnostics = {
-                enable = true,
-                disabled = { "unresolved-proc-macro" },
-                enableExperimental = true,
-            },
-        }
-    },
-})
+vim.keymap.set(
+  "n",
+  "<leader>dc",
+  function()
+    -- vim.cmd.rustlsp('debug')
+    vim.cmd.RustLsp('debuggables')
+  end,
+  { silent = true, buffer = bufnr }
+)
 
-require('lspconfig').rust_analyzer.manager.try_add_wrapper()
+vim.keymap.set(
+  "n",
+  "<s-f5>",
+  function()
+    print("quitting")
+  end,
+  { silent = true, buffer = bufnr }
+)
